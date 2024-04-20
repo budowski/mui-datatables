@@ -223,6 +223,7 @@ class MUIDataTable extends React.Component {
       selectableRowsHideCheckboxes: PropTypes.bool,
       selectableRowsOnClick: PropTypes.bool,
       serverSide: PropTypes.bool,
+      clientSideFiltering: PropTypes.bool,
       tableId: PropTypes.string,
       tableBodyHeight: PropTypes.string,
       tableBodyMaxHeight: PropTypes.string,
@@ -419,6 +420,7 @@ class MUIDataTable extends React.Component {
     selectableRowsOnClick: false,
     selectableRowsHeader: true,
     serverSide: false,
+    clientSideFiltering: false,
     serverSideFilterList: null,
     setTableProps: () => ({}),
     sort: true,
@@ -1436,7 +1438,7 @@ class MUIDataTable extends React.Component {
         return {
           page: 0,
           filterList: filterList,
-          displayData: this.options.serverSide
+          displayData: this.options.serverSide && !this.options.clientSideFiltering
             ? prevState.displayData
             : this.getDisplayData(
                 prevState.columns,
