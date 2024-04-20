@@ -108,7 +108,7 @@ const STP = {
   REPLACE: 'replace',
   ABOVE: 'above',
   NONE: 'none',
-  ALWAYS: 'always'
+  ALWAYS: 'always',
 };
 
 class MUIDataTable extends React.Component {
@@ -1056,7 +1056,7 @@ class MUIDataTable extends React.Component {
       }
     }
 
-    if (options.serverSide) {
+    if (options.serverSide && !options.clientSideFiltering) {
       if (customSearch) {
         console.warn('Server-side filtering is enabled, hence custom search will be ignored.');
       }
@@ -1438,16 +1438,17 @@ class MUIDataTable extends React.Component {
         return {
           page: 0,
           filterList: filterList,
-          displayData: this.options.serverSide && !this.options.clientSideFiltering
-            ? prevState.displayData
-            : this.getDisplayData(
-                prevState.columns,
-                prevState.data,
-                filterList,
-                prevState.searchText,
-                null,
-                this.props,
-              ),
+          displayData:
+            this.options.serverSide && !this.options.clientSideFiltering
+              ? prevState.displayData
+              : this.getDisplayData(
+                  prevState.columns,
+                  prevState.data,
+                  filterList,
+                  prevState.searchText,
+                  null,
+                  this.props,
+                ),
           previousSelectedRow: null,
         };
       },
@@ -1935,7 +1936,8 @@ class MUIDataTable extends React.Component {
 
     return (
       <Paper elevation={this.options.elevation} ref={this.tableContent} className={paperClasses}>
-        {(this.options.selectToolbarPlacement === STP.ALWAYS || selectedRows.data.length > 0 && this.options.selectToolbarPlacement !== STP.NONE) && (
+        {(this.options.selectToolbarPlacement === STP.ALWAYS ||
+          (selectedRows.data.length > 0 && this.options.selectToolbarPlacement !== STP.NONE)) && (
           <TableToolbarSelectComponent
             options={this.options}
             selectedRows={selectedRows}
